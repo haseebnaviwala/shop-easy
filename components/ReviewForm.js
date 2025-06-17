@@ -3,8 +3,10 @@ import { View, TextInput, Text, StyleSheet, Alert } from "react-native";
 import { Button, Rating } from "react-native-elements";
 import axios from "axios";
 import { API_BASE, postReview } from "../data/api";
+import { useThemeContext } from '../context/ThemeContext';
 
 const ReviewForm = ({ productId, onReviewAdded }) => {
+  const { theme } = useThemeContext();
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -40,20 +42,47 @@ const ReviewForm = ({ productId, onReviewAdded }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Leave a Review</Text>
-      <Rating
-        imageSize={24}
-        startingValue={rating}
-        onFinishRating={setRating}
-        style={styles.rating}
-      />
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme === 'dark' ? '#121212' : '#fff' },
+      ]}
+    >
+      <Text style={[styles.label, { color: theme === 'dark' ? '#fff' : '#000' }]}>
+        Leave a Review
+      </Text>
+
       <TextInput
-        style={styles.input}
-        placeholder="Write your comment..."
+        placeholder="Write your thoughts..."
         value={comment}
         onChangeText={setComment}
         multiline
+        numberOfLines={4}
+        placeholderTextColor={theme === 'dark' ? '#999' : '#666'}
+        style={[
+          styles.input,
+          {
+            backgroundColor: theme === 'dark' ? '#2a2a2a' : '#f2f2f2',
+            color: theme === 'dark' ? '#fff' : '#000',
+            borderColor: theme === 'dark' ? '#444' : '#ccc',
+          },
+        ]}
+      />
+
+      <Text style={[styles.label, { color: theme === 'dark' ? '#ddd' : '#333' }]}>
+        Rate this product
+      </Text>
+
+      <Rating
+        type="custom"
+        imageSize={30}
+        ratingCount={5}
+        startingValue={rating}
+        onFinishRating={(val) => setRating(val)}
+        tintColor={theme === 'dark' ? '#121212' : '#fff'}
+        ratingColor="#FFD700" // filled stars (gold)
+        ratingBackgroundColor={theme === 'dark' ? '#333' : '#ccc'} // unfilled stars
+        style={styles.rating}
       />
       <Button
         title={loading ? "Submitting..." : "Submit Review"}

@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     height: 250,
     borderRadius: 10,
     marginTop: 10,
+    resizeMode: "contain",
   },
   info: {
     marginTop: 15,
